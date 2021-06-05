@@ -1,12 +1,14 @@
 // Get quotes from API
 (function(){
-    const quoteContainer = document.getElementById('quote-container');
+    const quoteContainer = document.getElementById('body-container');
     const quoteText =  document.getElementById('quote');
     const author = document.getElementById('author');
     const newQuoteBtn = document.getElementById('new-quote');
     const twitterBtn =  document.getElementById('twitter');
     const loader = document.getElementById('loader');
-
+    const greeting = document.getElementById('greeting');
+    const clock = document.getElementById('clock');
+    const myBox = document.getElementById('myBox');
 
 let apiQuotes = [];
 let counter =500;
@@ -26,14 +28,13 @@ let counter =500;
 
  async function getQuote() {
     loading();
+    updateBackgroudAndStartup();
         let quote = {};
         if(typeof localQuotes === 'undefined'){
-            console.log('apiCall');
             await getQuotes();
             quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
         }
-        else {
-            console.log('local')
+        else {  
             quote = localQuotes[Math.floor(Math.random() * localQuotes.length)];
         }
         //check quote length
@@ -49,6 +50,7 @@ let counter =500;
             quoteText.textContent = quote.text; 
             loading_complete();
         }
+        
    
     }
 
@@ -58,15 +60,64 @@ let counter =500;
         window.open(twitterUrl,'_blank');
     }
 
+    function FocusonBox() {
+        myBox.classList.remove('inputborder');
+        myBox.classList.add('outoffocus');
+    }
+
+
+    function FocusOutBox() {
+        
+    }
+
     function init(){
-        //loader.hidden = true;
-        //eventListener
+        updateBackgroudAndStartup();
         newQuoteBtn.addEventListener('click',getQuote);
         twitterBtn.addEventListener('click',TweetQuote);
+        myBox.addEventListener('focusin',FocusonBox);
+        myBox.addEventListener('focusout',FocusOutBox);
+
 
         //get first quote
         getQuote();
     }
+
+    function updateBackgroudAndStartup(){
+        let bgimg = unsplashImages[Math.floor(Math.random() * unsplashImages.length)].urls.regular;
+        document.body.style.backgroundImage = `url(${bgimg})`;
+        clock.textContent = new Date().toLocaleString('en-US', { hour: 'numeric',minute:'numeric', hour12: true });
+        let hour = new Date().toLocaleTimeString();
+        timeZone(hour);
+
+
+    }
+
+
+    function timeZone(hour){
+        var a=hour;
+        var b="06:00:00";
+        var c="12:00:00";
+        var d="18:00:00";
+
+        var dd1=a.split(":");
+        var dd2=b.split(":");
+        var dd3=c.split(":");
+        var dd4=d.split(":");
+   
+            if(dd1>=dd2 && dd1<=dd3)
+            {
+                greeting.textContent = 'Good Morning'
+            }
+            else if(dd1>=dd3 && dd1<=dd4){
+                greeting.textContent = 'Good Afternoon'
+            }
+            else 
+            {
+                greeting.textContent = 'Good Evening'
+            }
+        }
+
+    
 
     //show loading
     function loading(){
