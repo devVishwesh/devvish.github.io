@@ -67,7 +67,10 @@ let counter =500;
 
 
     function FocusOutBox() {
-        
+        if(myBox.textContent===""){
+        myBox.classList.add('inputborder');
+        myBox.classList.remove('outoffocus');
+        }
     }
 
     function init(){
@@ -77,18 +80,22 @@ let counter =500;
         myBox.addEventListener('focusin',FocusonBox);
         myBox.addEventListener('focusout',FocusOutBox);
 
+        setInterval(time, 1000);
 
         //get first quote
         getQuote();
     }
 
+    function time() {
+        clock.textContent = new Date().toLocaleString('en-US', { hour: 'numeric',minute:'numeric',second:'numeric', hour12: true });
+      }
+
     function updateBackgroudAndStartup(){
         let bgimg = unsplashImages[Math.floor(Math.random() * unsplashImages.length)].urls.regular;
         document.body.style.backgroundImage = `url(${bgimg})`;
-        clock.textContent = new Date().toLocaleString('en-US', { hour: 'numeric',minute:'numeric', hour12: true });
+        
         let hour = new Date().toLocaleTimeString();
         timeZone(hour);
-
 
     }
 
@@ -133,7 +140,11 @@ let counter =500;
 
     init();
     //loading();
+  
+
    
+    
+
 
  
     
